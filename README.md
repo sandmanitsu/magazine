@@ -3,6 +3,7 @@ config.yaml
 |
 v
 
+```
 application:
   host: "host"
   port: "port"
@@ -12,3 +13,4 @@ db:
   password: "pass"
   dbname: "dbname"
   port: "port"
+```
