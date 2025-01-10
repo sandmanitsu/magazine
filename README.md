@@ -1,8 +1,5 @@
 config.yaml 
 
-|
-v
-
 ```
 application:
   host: "host"
