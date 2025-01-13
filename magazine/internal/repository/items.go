@@ -7,7 +7,7 @@ import (
 	"gorm.io/gorm"
 )
 
-type Items interface {
+type IItems interface {
 	Items(where []string, values []interface{}, offset, limit int) ([]Item, error)
 }
 

@@ -7,15 +7,15 @@ import (
 	"strconv"
 )
 
-type Item interface {
+type IItem interface {
 	Items(params url.Values) ([]repository.Item, error)
 }
 
 type ItemService struct {
-	repos repository.Items
+	repos repository.IItems
 }
 
-func NewItemService(repos repository.Items) *ItemService {
+func NewItemService(repos repository.IItems) *ItemService {
 	return &ItemService{
 		repos: repos,
 	}
