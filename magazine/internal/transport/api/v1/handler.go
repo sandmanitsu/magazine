@@ -20,5 +20,6 @@ func (h *Hanlder) Init(api *gin.RouterGroup) {
 	v1 := api.Group("/v1")
 	{
 		h.initItemsRoutes(v1)
+		h.initBrandRoutes(v1)
 	}
 }
