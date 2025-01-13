@@ -3,7 +3,7 @@ package repository
 import "gorm.io/gorm"
 
 type Repositories struct {
-	Items Items
+	Items IItems
 }
 
 func NewRepository(db *gorm.DB) *Repositories {

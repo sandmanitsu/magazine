@@ -5,7 +5,7 @@ import (
 )
 
 type Services struct {
-	Items Item
+	Items IItem
 }
 
 func NewService(repos *repository.Repositories) *Services {
