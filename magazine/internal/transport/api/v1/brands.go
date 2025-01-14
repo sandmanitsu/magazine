@@ -1,6 +1,7 @@
 package v1
 
 import (
+	service "magazine/internal/services"
 	"net/http"
 	"net/url"
 
@@ -11,6 +12,7 @@ func (h *Hanlder) initBrandRoutes(api *gin.RouterGroup) {
 	items := api.Group("/brand")
 	{
 		items.GET("/list", h.brandsList)
+		items.POST("/signup", h.signUpBrand)
 	}
 }
 
@@ -26,4 +28,35 @@ func (h *Hanlder) brandsList(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, brands)
+}
+
+type BrandSignUpData struct {
+	Name     string `json:"name"`
+	Email    string `json:"email"`
+	Password string `json:"password"`
+	Login    string `json:"login"`
+}
+
+func (h *Hanlder) signUpBrand(c *gin.Context) {
+	var data BrandSignUpData
+	err := c.BindJSON(&data)
+	if err != nil {
+		c.String(http.StatusBadRequest, "Error: invalid data")
+
+		return
+	}
+
+	err = h.services.Brand.SignUp(service.BrandSignUpData{
+		Name:     data.Name,
+		Email:    data.Email,
+		Password: data.Password,
+		Login:    data.Login,
+	})
+	if err != nil {
+		c.String(http.StatusBadRequest, "Failed")
+
+		return
+	}
+
+	c.String(http.StatusOK, "Success")
 }

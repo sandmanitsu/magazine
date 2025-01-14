@@ -13,6 +13,7 @@ const (
 
 type IBrand interface {
 	Brands(where []string, values []interface{}, offset, limit int) ([]Brand, error)
+	Create(data Brand) (int, error)
 }
 
 type Brand struct {
@@ -31,6 +32,16 @@ func NewBrandRepository(db *gorm.DB) *BrandRepository {
 	return &BrandRepository{
 		db: db,
 	}
+}
+
+// Creating new brand
+func (r *BrandRepository) Create(data Brand) (int, error) {
+	result := r.db.Table(table).Create(&data)
+	if result.Error != nil {
+		return 0, result.Error
+	}
+
+	return data.ID, nil
 }
 
 // Return list of brands with filter

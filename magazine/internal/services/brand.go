@@ -3,22 +3,56 @@ package service
 import (
 	"fmt"
 	"magazine/internal/repository"
+	"magazine/pkg/hash"
 	"net/url"
 	"strconv"
 )
 
 type IBrand interface {
 	Brands(params url.Values) ([]repository.Brand, error)
+	SignUp(data BrandSignUpData) error
 }
 
 type BrandService struct {
-	repos repository.IBrand
+	repos  repository.IBrand
+	hasher hash.IHasher
 }
 
-func NewBrandService(repos repository.IBrand) *BrandService {
+func NewBrandService(repos repository.IBrand, hasher hash.IHasher) *BrandService {
 	return &BrandService{
-		repos: repos,
+		repos:  repos,
+		hasher: hasher,
 	}
+}
+
+type BrandSignUpData struct {
+	Name     string `json:"name"`
+	Email    string `json:"email"`
+	Password string `json:"password"`
+	Login    string `json:"login"`
+}
+
+// todo. Добавить валидацию
+func (s *BrandService) SignUp(data BrandSignUpData) error {
+	hashedPassword, err := s.hasher.Hash(data.Password)
+	if err != nil {
+		return fmt.Errorf("error: creating pass")
+	}
+
+	brand := repository.Brand{
+		Name:     data.Name,
+		Email:    data.Email,
+		Password: hashedPassword,
+		Login:    data.Login,
+	}
+
+	id, err := s.repos.Create(brand)
+	fmt.Println(id)
+	if err != nil {
+		return fmt.Errorf("error: creating brand")
+	}
+
+	return nil
 }
 
 func (s *BrandService) Brands(params url.Values) ([]repository.Brand, error) {
