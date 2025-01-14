@@ -21,5 +21,6 @@ func (h *Hanlder) Init(api *gin.RouterGroup) {
 	{
 		h.initItemsRoutes(v1)
 		h.initBrandRoutes(v1)
+		h.initSignUpRoutes(v1)
 	}
 }
