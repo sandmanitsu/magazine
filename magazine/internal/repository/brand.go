@@ -13,6 +13,7 @@ const (
 
 type IBrand interface {
 	Brands(where []string, values []interface{}, offset, limit int) ([]Brand, error)
+	Brand(login string) Brand
 	Create(data Brand) (int, error)
 }
 
@@ -54,4 +55,13 @@ func (r *BrandRepository) Brands(where []string, values []interface{}, offset, l
 	}
 
 	return brand, nil
+}
+
+// Return brand by login and password
+func (r *BrandRepository) Brand(login string) Brand {
+	var brand Brand
+
+	r.db.Raw("SELECT * FROM brand WHERE login = ?", login).Scan(&brand)
+
+	return brand
 }

@@ -13,6 +13,7 @@ func (h *Hanlder) initBrandRoutes(api *gin.RouterGroup) {
 	{
 		items.GET("/list", h.brandsList)
 		items.POST("/signup", h.signUpBrand)
+		items.POST("/signin", h.signInBrand)
 	}
 }
 
@@ -59,4 +60,31 @@ func (h *Hanlder) signUpBrand(c *gin.Context) {
 	}
 
 	c.String(http.StatusOK, "Success")
+}
+
+type BrandSignInData struct {
+	Login    string `json:"login"`
+	Password string `json:"password"`
+}
+
+func (h *Hanlder) signInBrand(c *gin.Context) {
+	var data BrandSignInData
+	err := c.BindJSON(&data)
+	if err != nil {
+		c.String(http.StatusBadRequest, "Error: invalid data")
+
+		return
+	}
+
+	tokens, err := h.services.Brand.SignIn(service.BrandSignInData{
+		Login:    data.Login,
+		Password: data.Password,
+	})
+	if err != nil {
+		c.String(http.StatusBadRequest, "Error: invalid data")
+
+		return
+	}
+
+	c.JSON(http.StatusOK, tokens)
 }

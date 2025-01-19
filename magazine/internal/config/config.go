@@ -12,6 +12,7 @@ import (
 type Config struct {
 	Application Application `yaml:"application" env-required:"true"`
 	DB          DB          `yaml:"db" env-required:"true"`
+	Auth        Auth        `yaml:"auth" env-required:"true"`
 }
 
 type Application struct {
@@ -25,6 +26,11 @@ type DB struct {
 	Password string `yaml:"password" env-required:"true"`
 	Port     string `yaml:"port" env-required:"true"`
 	DBname   string `yaml:"dbname" env-required:"true"`
+}
+
+type Auth struct {
+	SecretKey string `yaml:"secret_key" env-required:"true"`
+	JWT_TTL   string `yaml:"jwt_ttl" env-required:"true`
 }
 
 var (
